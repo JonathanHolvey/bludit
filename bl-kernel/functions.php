@@ -723,3 +723,7 @@ function activateTheme($themeDirectory) {
 	}
 	return false;
 }
+
+function setHttpCode($httpCode, $httpMessage) {
+	header('HTTP/1.0 '.$httpCode.' '.$httpMessage);
+}

@@ -161,6 +161,8 @@ class Url
 		$this->notFound = $notFound;
 		$this->httpCode = $httpCode;
 		$this->httpMessage = $httpMessage;
+		if (!$notFound)
+			setHttpCode($httpCode, $httpMessage);
 	}
 
 	public function httpCode()
