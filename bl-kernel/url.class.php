@@ -155,14 +155,12 @@ class Url
 		return 1;
 	}
 
-	public function setNotFound($notFound=true, $httpCode=404, $httpMessage='Not Found')
+	public function setNotFound()
 	{
 		$this->setWhereAmI('page');
-		$this->notFound = $notFound;
-		$this->httpCode = $httpCode;
-		$this->httpMessage = $httpMessage;
-		if (!$notFound)
-			setHttpCode($httpCode, $httpMessage);
+		$this->notFound = true;
+		$this->httpCode = 404;
+		$this->httpMessage = 'Not Found';
 	}
 
 	public function httpCode()
@@ -170,7 +168,7 @@ class Url
 		return $this->httpCode;
 	}
 
-	public function setHttpCode($code = 200)
+	public function setHttpCode($code=200)
 	{
 		$this->httpCode = $code;
 	}
@@ -180,9 +178,22 @@ class Url
 		return $this->httpMessage;
 	}
 
-	public function setHttpMessage($msg = 'OK')
+	public function setHttpMessage($msg='OK')
 	{
 		$this->httpMessage = $msg;
+	}
+
+	function overrideStatus($httpCode, $httpMessage)
+	{
+		$this->notFound = (floor($httpCode / 100) == 4);
+		$this->httpCode = $httpCode;
+		$this->httpMessage = $httpMessage;
+		$this->sendHttpStatus();
+	}
+
+	public function sendHttpStatus()
+	{
+		header('HTTP/1.0 '.$this->httpCode.' '.$this->httpMessage);
 	}
 
 	private function sortByLength($a, $b)
